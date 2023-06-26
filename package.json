@@ -1,0 +1,9 @@
+{
+  "name": "QuickInfo EXP Viewer",
+  "version": "1.0.0",
+  "description": "Shows the EXP the enemy will give you in the quickinfo popup.",
+  "homepage": "https://github.com/lexisother/cc-quickinfo-exp",
+  "module": true,
+  "prestart": "prestart.js",
+  "ccmodDependencies": {}
+}
