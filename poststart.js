@@ -1,29 +1,15 @@
-// HACK: Too lazy to write langfile patches right now.
-ig.Lang.inject({
-  get(label) {
-    let temp = this.parent(label);
-    return temp != 'UNKNOWN LABEL' ? temp : label.split('.').slice(-1);
+sc.AlyxEnemyBaseParamLine = sc.EnemyBaseParamLine.extend({
+  alyGfx: new ig.Image('media/gui/aly.png'),
+  srcX: null,
+  srcY: null,
+  init(label, x, y) {
+    this.parent(label);
+    this.srcX = x;
+    this.srcY = y;
   },
-});
-
-// Quick injection to allow additional Y values for selecting other icon rows
-sc.EnemyBaseParamLine.inject({
-  additionalY: 0,
-  init(a, b, c = 0) {
-    this.parent(a, b);
-    this.additionalY = c;
-  },
-  updateDrawables(a) {
-    a.addGfx(this.gfx, 0, 0, 520, 48, 118, 11);
-    a.addGfx(
-      this.gfx,
-      0,
-      0,
-      sc.MODIFIER_ICON_DRAW.X + this.icon * 12,
-      sc.MODIFIER_ICON_DRAW.Y + this.additionalY, // only change from original func
-      11,
-      11,
-    );
+  updateDrawables(renderer) {
+    renderer.addGfx(this.gfx, 0, 0, 520, 48, 118, 11);
+    renderer.addGfx(this.alyGfx, 0, 0, this.srcX, this.srcY, 11, 11);
   },
 });
 
@@ -37,8 +23,7 @@ sc.QUICK_INFO_BOXES.Enemy.inject({
     // 77 was chosen because the game starts with 21 (for the first line), then
     //    adds 14 per additional status line (there's 3 more), which results in
     //    63, +14 for ours.
-    this.exp = this.createStatusLine('exp', 4, 4, 77, 12);
-
+    this.exp = this.createAlyxStatusLine('EXP', 4, 77, 0, 0);
     // Nudge this downwards a little to give space to our status line
     this.resistance.setPos(4, 95);
   },
@@ -70,12 +55,8 @@ sc.QUICK_INFO_BOXES.Enemy.inject({
       this.exp.setNumber(expToGive, true);
     }
   },
-  createStatusLine(label, icon, x, y, additionalIconDrawY) {
-    let paramLine = new sc.EnemyBaseParamLine(
-      ig.lang.get('sc.gui.menu.equip.' + label),
-      icon,
-      additionalIconDrawY,
-    );
+  createAlyxStatusLine(label, x, y, srcX, srcY) {
+    let paramLine = new sc.AlyxEnemyBaseParamLine(label, srcX, srcY);
     paramLine.setPos(x, y);
     this.addChildGui(paramLine);
     return paramLine;
