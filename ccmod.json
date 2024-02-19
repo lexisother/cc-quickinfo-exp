@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "title": "QuickInfo EXP Viewer",
   "description": "Shows the EXP the enemy will give you in the quickinfo popup.",
-  "poststart": "poststart.js",
-  "dependencies": {}
+  "repository": "https://github.com/lexisother/cc-quickinfo-exp",
+  "tags": ["QoL"],
+  "authors": "lexisother",
+  "poststart": "poststart.js"
 }
